@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeleType Editor</title>
+    
+    <!-- Подключение Highlight.js для подсветки синтаксиса -->
+    <link rel="stylesheet" 
+          href="../ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="../ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <!-- Подключение дополнительных языков -->
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/css.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/php.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/xml.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+    <script src="../ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+    
+    <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+    <!-- Плавающая панель инструментов -->
+    <div id="toolbar" class="toolbar">
+        <div class="toolbar-content">
+            <!-- Кнопка возврата -->
+            <div class="toolbar-group">
+                <button id="backToStartBtn" class="toolbar-btn" title="Вернуться к списку документов">
+                    <span class="toolbar-icon">←</span>
+                    <span class="toolbar-label">Назад</span>
+                </button>
+            </div>
+            
+            <!-- Разделитель -->
+            <div class="toolbar-separator"></div>
+            
+            <!-- Стили текста -->
+            <div class="toolbar-group">
+                <button class="toolbar-dropdown-trigger" title="Стили текста">
+                    <span class="toolbar-icon">Аа</span>
+                    <span class="toolbar-label">Стиль</span>
+                </button>
+                <div class="toolbar-dropdown">
+                    <button data-style="h1" class="dropdown-item" title="Заголовок 1">
+                        <span class="style-preview" style="font-size: 32px; font-weight: bold;">H1</span>
+                        <span class="style-label">Заголовок 1</span>
+                    </button>
+                    <button data-style="h2" class="dropdown-item" title="Заголовок 2">
+                        <span class="style-preview" style="font-size: 26px; font-weight: bold;">H2</span>
+                        <span class="style-label">Заголовок 2</span>
+                    </button>
+                    <button data-style="h3" class="dropdown-item" title="Заголовок 3">
+                        <span class="style-preview" style="font-size: 22px; font-weight: bold; font-style: italic;">H3</span>
+                        <span class="style-label">Заголовок 3</span>
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button data-style="p" class="dropdown-item" title="Обычный текст">
+                        <span class="style-preview" style="font-size: 16px;">Текст</span>
+                        <span class="style-label">Обычный текст</span>
+                    </button>
+                    <button data-style="ul" class="dropdown-item" title="Маркированный список">
+                        <span class="style-preview" style="font-size: 16px;">• Список</span>
+                        <span class="style-label">Список</span>
+                    </button>
+                    <button data-style="ol" class="dropdown-item" title="Нумерованный список">
+                        <span class="style-preview" style="font-size: 16px;">1. Список</span>
+                        <span class="style-label">Нумер. список</span>
+                    </button>
+                    <button data-style="blockquote" class="dropdown-item" title="Цитата">
+                        <span class="style-preview" style="font-size: 16px; font-style: italic; color: #b0b0b0;">"Цитата"</span>
+                        <span class="style-label">Цитата</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Выравнивание -->
+            <div class="toolbar-group">
+                <button class="toolbar-dropdown-trigger" title="Выравнивание текста">
+                    <span class="toolbar-icon">Вр</span>
+                    <span class="toolbar-label">Выравнивание</span>
+                </button>
+                <div class="toolbar-dropdown">
+                    <button data-align="left" class="dropdown-item align-item" title="По левому краю">
+                        <span class="align-preview" style="text-align: left;">⎸ Текст</span>
+                        <span class="align-label">По левому краю</span>
+                    </button>
+                    <button data-align="center" class="dropdown-item align-item" title="По центру">
+                        <span class="align-preview" style="text-align: center;">⎸ Текст ⎸</span>
+                        <span class="align-label">По центру</span>
+                    </button>
+                    <button data-align="right" class="dropdown-item align-item" title="По правому краю">
+                        <span class="align-preview" style="text-align: right;">Текст ⎸</span>
+                        <span class="align-label">По правому краю</span>
+                    </button>
+                    <button data-align="justify" class="dropdown-item align-item" title="По ширине">
+                        <span class="align-preview" style="text-align: justify;">⎸ Текст ⎸</span>
+                        <span class="align-label">По ширине</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Разделитель -->
+            <div class="toolbar-separator"></div>
+            
+            <!-- Базовое форматирование -->
+            <div class="toolbar-group">
+                <button data-command="bold" class="toolbar-btn" title="Жирный (Ctrl+B)">
+                    <span class="toolbar-icon">B</span>
+                    <span class="toolbar-label">Жирный</span>
+                </button>
+                <button data-command="italic" class="toolbar-btn" title="Курсив (Ctrl+I)">
+                    <span class="toolbar-icon">I</span>
+                    <span class="toolbar-label">Курсив</span>
+                </button>
+                <button data-command="underline" class="toolbar-btn" title="Подчеркнутый (Ctrl+U)">
+                    <span class="toolbar-icon">U</span>
+                    <span class="toolbar-label">Подчерк.</span>
+                </button>
+                <button data-command="strikeThrough" class="toolbar-btn" title="Зачеркнутый">
+                    <span class="toolbar-icon">S</span>
+                    <span class="toolbar-label">Зачерк.</span>
+                </button>
+                <!-- Добавляем кнопку цитаты -->
+                <button id="quoteBtn" class="toolbar-btn" title="Цитата">
+                    <span class="toolbar-icon">❝</span>
+                    <span class="toolbar-label">Цитата</span>
+                </button>
+                <!-- Добавляем кнопку кода -->
+                <button id="codeBtn" class="toolbar-btn" title="Вставить код">
+                    <span class="toolbar-icon">&lt;/&gt;</span>
+                    <span class="toolbar-label">Код</span>
+                </button>
+                <!-- Добавляем кнопку выбора языка -->
+                <button id="languageBtn" class="toolbar-btn" title="Выбрать язык программирования">
+                    <span class="toolbar-icon">🌐</span>
+                    <span class="toolbar-label">Язык</span>
+                </button>
+            </div>
+            
+            <!-- Разделитель -->
+            <div class="toolbar-separator"></div>
+            
+            <!-- Действия -->
+            <div class="toolbar-group">
+                <button id="exportBtn" class="toolbar-btn" title="Экспорт в HTML">
+                    <span class="toolbar-icon">📥</span>
+                    <span class="toolbar-label">Экспорт</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Статус автосохранения -->
+        <div class="toolbar-status">
+            <span id="saveStatus">● Автосохранение</span>
+            <span id="wordCount">0 слов</span>
+        </div>
+    </div>
+    
+    <!-- Область редактора -->
+    <div id="editor" contenteditable="true" class="editor-area"></div>
+    
+    <!-- Уведомление -->
+    <div id="notification" class="notification"></div>
+    
+    <!-- Модальное окно для выбора языка -->
+    <div id="languageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Выберите язык программирования</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="language-grid">
+                    <button data-lang="javascript" class="language-btn">JavaScript</button>
+                    <button data-lang="python" class="language-btn">Python</button>
+                    <button data-lang="java" class="language-btn">Java</button>
+                    <button data-lang="cpp" class="language-btn">C++</button>
+                    <button data-lang="html" class="language-btn">HTML</button>
+                    <button data-lang="css" class="language-btn">CSS</button>
+                    <button data-lang="php" class="language-btn">PHP</button>
+                    <button data-lang="sql" class="language-btn">SQL</button>
+                    <button data-lang="json" class="language-btn">JSON</button>
+                    <button data-lang="xml" class="language-btn">XML</button>
+                    <button data-lang="bash" class="language-btn">Bash/Shell</button>
+                    <button data-lang="typescript" class="language-btn">TypeScript</button>
+                    <button data-lang="go" class="language-btn">Go</button>
+                    <button data-lang="rust" class="language-btn">Rust</button>
+                    <button data-lang="plaintext" class="language-btn">Без подсветки</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="editor.js"></script>
+
+    <!-- Футер с информацией -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span class="footer-text">© 2025 TeleType Editor v1.2</span>
+                <span class="footer-text">Разработано с ❤️ для Firefox</span>
+            </div>
+            <div class="footer-right">
+                <a href="https://github.com/blackjackbander" class="footer-link" target="_blank">О разработчике</a>
+                <span class="footer-separator">•</span>
+                <a href="mailto:6erhltzvs@mozmail.com" class="footer-link">Обратная связь</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

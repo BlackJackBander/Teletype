@@ -1,0 +1,44 @@
+{
+  "manifest_version": 2,
+  "name": "TeleType Editor",
+  "version": "1.2",
+  "description": "Продвинутый текстовый редактор с подсветкой синтаксиса и темной темой",
+  
+  "author": "Ваше Имя или Название Компании",
+  "homepage_url": "https://github.com/blackjackbander",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "TeleTypeEditor_BlackJackBander@yandex.ru", 
+      "strict_min_version": "140.0", 
+      "data_collection_permissions": {
+        "required": ["none"] 
+      }
+    }
+  },
+  "permissions": [
+    "storage",
+    "clipboardWrite"
+  ],  
+  
+  "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
+  
+  "browser_action": {
+    "default_title": "Открыть TeleType Editor"
+  },
+  
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  
+  "web_accessible_resources": [
+    "sounds/*.wav",
+    "icons/*.png"
+  ],
+  
+  "developer": {
+    "name": "Sergey Shaposhnikov aka BlackJackBander",
+    "url": "https://github.com/blackjackbander"
+  }
+}
